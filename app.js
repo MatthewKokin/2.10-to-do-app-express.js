@@ -4,8 +4,10 @@ const bodyParser = require("body-parser");
 
 const app = express();
 app.use(bodyParser.urlencoded({extended: true}))
-app.use(express.static('static'))
+app.use(express.static('publich'))
 app.set('view engine', 'ejs');
+
+let items = [];
 
 
 app.get("/", function(req, res){
@@ -22,13 +24,21 @@ app.get("/", function(req, res){
         day = "Weekday 😎"
     }
 
-    res.render("list", {specificDay: specDay})
+    res.render("list", {
+        specificDay: specDay,
+        items: items
+    });
+    
 });
 
 app.post("/", function(req, res){
-    const toDoTask = req.body.task;
-    console.log(toDoTask);
-    res.redirect("/");
+    const item = req.body.task;
+    if (item != ""){
+        items.push(item);
+        res.redirect("/");
+    } else{
+        res.redirect("/");
+    }
 })
 
 
